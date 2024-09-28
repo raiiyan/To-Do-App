@@ -10,7 +10,9 @@ const LoadDB = async () => {
 LoadDB();
 
 export async function GET(request) {
-    return NextResponse.json({msg:"get method hit"})
+
+    const todos = await TodoModel.find({});
+    return NextResponse.json({todos:todos})
     
 }
 
@@ -24,5 +26,29 @@ export async function POST(request) {
     })
 
     return NextResponse.json({msg:"Task Added Successfully!"})
+    
+}
+
+export async function DELETE(request) {
+
+    const mongoId = await request.nextUrl.searchParams.get('mongoId');
+
+    await TodoModel.findByIdAndDelete(mongoId);
+
+    return NextResponse.json({msg:"Task Deleted."})
+    
+}
+
+export async function PUT(request) {
+
+    const mongoId = await request.nextUrl.searchParams.get('mongoId');
+
+    await TodoModel.findByIdAndUpdate(mongoId,{
+        $set:{
+            isCompleted:true
+        }
+    });
+
+    return NextResponse.json({msg:"Task Completed!"})
     
 }
