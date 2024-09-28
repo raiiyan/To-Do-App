@@ -31,7 +31,7 @@ export default function Home() {
     fetchTodos();
   }
   
-  const completeTodo = async (id: String) => {
+  const completeTodo = async (id: string) => {
 
     const response = await axios.put('/api',{},{
       params:{
