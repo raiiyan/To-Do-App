@@ -76,7 +76,7 @@ export default function Home() {
       // Fetch the updated todos or data
       await fetchTodos();
 
-    } catch (error) {
+    } catch {
       // Show error toast message
       toast.error("Unsuccessful!");
     }
