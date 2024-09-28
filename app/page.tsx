@@ -70,7 +70,7 @@ export default function Home() {
 
       await fetchTodos();
 
-    } catch (error) {
+    } catch {
       toast.error("Unsuccessful!")
     }
   }
