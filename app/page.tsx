@@ -8,9 +8,9 @@ import axios from 'axios';
 
 export default function Home() {
 
-  const [formData,SetFormData] = useState ({
-    title:"",
-    description:"",
+  const [formData, SetFormData] = useState({
+    title: "",
+    description: "",
   })
 
   const [todoData, setTodoData] = useState([]);
@@ -22,62 +22,69 @@ export default function Home() {
 
   const deleteTodo = async (id: string) => {
 
-    const response = await axios.delete('/api',{
-      params:{
-        mongoId:id
+    const response = await axios.delete('/api', {
+      params: {
+        mongoId: id
       }
     })
     toast.success(response.data.msg);
     fetchTodos();
   }
-  
+
   const completeTodo = async (id: string) => {
 
-    const response = await axios.put('/api',{},{
-      params:{
-        mongoId:id
+    const response = await axios.put('/api', {}, {
+      params: {
+        mongoId: id
       }
     })
     toast.success(response.data.msg);
     fetchTodos();
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchTodos();
-  },[])
+  }, [])
 
 
 
-  const onChangeHandler = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    SetFormData(form => ({...form,[name]:value}));
-    console.log(formData);
-  }
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target; // Destructure the name and value from the target
+    SetFormData((form) => ({
+      ...form,
+      [name]: value, // Dynamically update form state based on the name of the input
+    }));
+    console.log(formData); // Check if formData is updating correctly
+  };
 
-  const onSubmitHandler = async (e) => {
+
+  const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      //api code
-      const response = await axios.post('/api',formData);
-      
-      toast.success(response.data.msg)
+      // Post formData to your API
+      const response = await axios.post('/api', formData);
 
+      // Show success toast message
+      toast.success(response.data.msg);
+
+      // Reset the form fields after successful submission
       SetFormData({
-        title:"",
-        description:"",
-      })
+        title: "",
+        description: "",
+      });
 
+      // Fetch the updated todos or data
       await fetchTodos();
 
-    } catch {
-      toast.error("Unsuccessful!")
+    } catch (error) {
+      // Show error toast message
+      toast.error("Unsuccessful!");
     }
-  }
+  };
 
   return (
     <>
-    <ToastContainer theme="light"/>
+      <ToastContainer theme="light" />
       <form onSubmit={onSubmitHandler} className="flex items-start flex-col gap-3 w-[80%] max-w-[600px] mt-24 px-2 mx-auto">
         <input value={formData.title} onChange={onChangeHandler} type="text" name="title" placeholder="Enter Title" className="px-3 py-2 border-2 w-full" />
         <textarea value={formData.description} onChange={onChangeHandler} name="description" placeholder="Enter Description" className="px-2 py-2 border-2 w-full"></textarea>
@@ -108,8 +115,8 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            
-            {todoData.map((item,index)=>{
+
+            {todoData.map((item, index) => {
               return <Todo key={index} id={index} title={item.title} description={item.description} complete={item.isCompleted} mongoId={item._id} deleteTodo={deleteTodo} completeTodo={completeTodo} />
             })}
 
