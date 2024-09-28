@@ -5,6 +5,7 @@ import Todo from '../Components/Todo'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import { TodoItem } from '../lib/types';
 
 export default function Home() {
 
@@ -13,7 +14,8 @@ export default function Home() {
     description: "",
   })
 
-  const [todoData, setTodoData] = useState([]);
+  const [todoData, setTodoData] = useState<TodoItem[]>([]);
+
 
   const fetchTodos = async () => {
     const response = await axios('/api');
@@ -43,8 +45,18 @@ export default function Home() {
   }
 
   useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const response = await axios.get('/api/todos'); // Ensure this is the correct route
+        setTodoData(response.data); // Ensure data is coming back and is set to state
+      } catch (error) {
+        console.error('Error fetching todos:', error);
+      }
+    };
+
     fetchTodos();
-  }, [])
+  }, []); // Ensure fetch is called only on mount
+
 
 
 
@@ -115,12 +127,20 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-
-            {todoData.map((item, index) => {
-              return <Todo key={index} id={index} title={item.title} description={item.description} complete={item.isCompleted} mongoId={item._id} deleteTodo={deleteTodo} completeTodo={completeTodo} />
-            })}
-
+            {todoData.map((item, index) => (
+              <Todo
+                key={index}
+                id={index}
+                title={item.title} // No more type error
+                description={item.description}
+                complete={item.isCompleted}
+                mongoId={item._id}
+                deleteTodo={deleteTodo}
+                completeTodo={completeTodo}
+              />
+            ))}
           </tbody>
+
         </table>
       </div>
 
