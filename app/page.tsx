@@ -20,7 +20,7 @@ export default function Home() {
     setTodoData(response.data.todos)
   }
 
-  const deleteTodo = async (id) => {
+  const deleteTodo = async (id: string) => {
 
     const response = await axios.delete('/api',{
       params:{
@@ -31,7 +31,7 @@ export default function Home() {
     fetchTodos();
   }
   
-  const completeTodo = async (id) => {
+  const completeTodo = async (id: String) => {
 
     const response = await axios.put('/api',{},{
       params:{
