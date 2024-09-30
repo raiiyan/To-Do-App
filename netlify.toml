@@ -6,7 +6,7 @@ publish = "out"
 NODE_ENV = "production"
 NPM_FLAGS = "--no-cache"
 
- NODE_VERSION = "18.17.0"
+ NODE_VERSION = "20.17.0"
 
 [build.cache]
 paths = ["node_modules/**"]
