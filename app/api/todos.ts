@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import {ConnectDB} from '@/lib/config/db';
-import TodoModel from '@/lib/models/TodoModel';
+import TodoModel from '../../lib/models/TodoModel';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await ConnectDB();
